@@ -37,17 +37,20 @@ public class ThreeDTicTacToe extends JPanel implements MouseListener {
     private int starter = (int)(2*Math.random()+1);
     private Timer timer;
     private boolean aiIsThinking = false;
+    private MyFrame parentFrame;
     
     /**
      * Constructor for ThreeDTicTacToe.
      * @param GAME_MODE Game mode selector (1 for single player, 2 for multiplier)
      */
-    ThreeDTicTacToe(int GAME_MODE) {
+    public ThreeDTicTacToe(int GAME_MODE, MyFrame parentFrame) {
+        this.parentFrame = parentFrame;
         // Set panel properties
         this.setVisible(true);
         this.addMouseListener(this);
         this.setBackground(BACKGROUND_COLOR);
-        
+        this.requestFocusInWindow();
+
         // Initialize the 3D array of cubes
         cubes = new Cube[gridSize][gridSize][gridSize];
         for (int x = 0; x < gridSize; x++) {
@@ -197,7 +200,8 @@ public class ThreeDTicTacToe extends JPanel implements MouseListener {
             } 
         }
         // Handle mouse clicks after the game ends
-        else new MyFrame(0);
+        //else new MyFrame(0);
+        else parentFrame.switchPanel(0);
         
         // Check for a winner or a tie
         if(winChecker.checkWin() == 1) {
@@ -243,7 +247,7 @@ public class ThreeDTicTacToe extends JPanel implements MouseListener {
             }
         };
 
-        timer = new Timer(50, aiAction);
+        timer = new Timer(5, aiAction);
         if(!aiIsThinking) timer.start();	
     }
 
