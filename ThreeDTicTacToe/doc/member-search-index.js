@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"<Unnamed>","c":"ThreeDAI","l":"getTheBestMove()"},{"p":"<Unnamed>","c":"ThreeDAI","l":"takeAction()"},{"p":"<Unnamed>","c":"ThreeDAI","l":"ThreeDAI(int, Cube[][][])","u":"%3Cinit%3E(int,Cube[][][])"}];updateSearchResults();
