@@ -19,11 +19,14 @@ public class HowToPlay extends JPanel implements MouseListener {
     private BufferedImage image;
     private File c1, c2, c3;
     private int slide = 1;
+    private MyFrame frame; // Reference to the main MyFrame
 
     /**
      * Constructor for the HowToPlay class. Initializes the panel and sets up mouse listener.
      */
-    HowToPlay() {
+    HowToPlay(MyFrame frame) {
+    	this.frame = frame;
+    	this.requestFocusInWindow();
         this.setVisible(true);
         this.addMouseListener(this);
 
@@ -100,7 +103,7 @@ public class HowToPlay extends JPanel implements MouseListener {
                     repaint();
                 }
             } else if (mouseX >= 350 && mouseX <= 500) {
-                new MyFrame(0);
+                frame.switchPanel(0);;
                 this.removeAll();
                 this.setVisible(false);
             }
