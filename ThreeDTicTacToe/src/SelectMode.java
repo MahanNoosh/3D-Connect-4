@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -7,23 +8,30 @@ import javax.swing.*;
  * It provides options for Single Player, Multiplayer, and accessing the instructions on how to win the game.
  */
 public class SelectMode extends JPanel implements MouseListener {
-    
+
     // Coordinates and dimensions for menu buttons
     private int buttonX = 350;
     private int baseButtonY = 350;
     private int buttonHeight = 60;
     private int buttonWidth = 150;
 
+    private MyFrame frame; // Reference to the main MyFrame
+
     /**
      * Constructor for SelectMode. Initializes the panel and adds mouse listener.
+     *
+     * @param frame Reference to the main MyFrame to allow panel switching.
      */
-    SelectMode(){
+    public SelectMode(MyFrame frame) {
+        this.frame = frame;
+        this.requestFocusInWindow();
         this.setVisible(true);
         this.addMouseListener(this);
     }
 
     /**
      * Overrides the paint method to draw the menu interface.
+     *
      * @param g Graphics context for drawing
      */
     @Override
@@ -32,19 +40,19 @@ public class SelectMode extends JPanel implements MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         this.setBackground(Color.BLACK);
         g2d.setColor(Color.WHITE);
-        
+
         // Draw Single Player button
         g2d.drawString("Single Player", buttonX + 35, baseButtonY + 35);
         g2d.drawRect(buttonX, baseButtonY, buttonWidth, buttonHeight);
-        
+
         // Draw Multiplayer button
         g2d.drawString("Multiplayer", buttonX + 40, baseButtonY + 155);
         g2d.drawRect(buttonX, baseButtonY + (2 * buttonHeight), buttonWidth, buttonHeight);
-        
+
         // Draw How to win? button
         g2d.drawString("How to win?", buttonX + 36, baseButtonY + 275);
         g2d.drawRect(buttonX, baseButtonY + (4 * buttonHeight), buttonWidth, buttonHeight);
-        
+
         // Set font for game title
         Font font = new Font("Arial", Font.BOLD, 36);
         g2d.setFont(font);
@@ -53,29 +61,22 @@ public class SelectMode extends JPanel implements MouseListener {
 
     /**
      * Handles the mouse click events on menu buttons.
+     *
      * @param e MouseEvent object containing details of the mouse click
      */
     @Override
     public void mouseClicked(MouseEvent e) {
         int mouseX = e.getX();
         int mouseY = e.getY();
-        
+
         // Check which button is clicked and initiate the corresponding game mode
-        if(mouseX >= buttonX && mouseX <= buttonX + buttonWidth) {
-            if(mouseY >= baseButtonY && mouseY <= baseButtonY + buttonHeight) {
-                new MyFrame(1); // Single Player
-                this.removeAll();
-                this.setVisible(false);
-            }
-            else if(mouseY >= baseButtonY + (2 * buttonHeight) && mouseY <= baseButtonY + (2 * buttonHeight) + buttonHeight) {
-                new MyFrame(2); // Multiplayer
-                this.removeAll();
-                this.setVisible(false);
-            }
-            else if(mouseY >= baseButtonY + (4 * buttonHeight) && mouseY <= baseButtonY + (4 * buttonHeight) + buttonHeight) {
-                new MyFrame(3); // How to win?
-                this.removeAll();
-                this.setVisible(false);
+        if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth) {
+            if (mouseY >= baseButtonY && mouseY <= baseButtonY + buttonHeight) {
+                frame.switchPanel(1); // Single Player
+            } else if (mouseY >= baseButtonY + (2 * buttonHeight) && mouseY <= baseButtonY + (2 * buttonHeight) + buttonHeight) {
+                frame.switchPanel(2); // Multiplayer
+            } else if (mouseY >= baseButtonY + (4 * buttonHeight) && mouseY <= baseButtonY + (4 * buttonHeight) + buttonHeight) {
+                frame.switchPanel(3); // How to win?
             }
         }
     }
@@ -93,3 +94,4 @@ public class SelectMode extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {}
 }
+
