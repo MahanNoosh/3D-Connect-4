@@ -154,64 +154,95 @@ public class ThreeDTicTacToe extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int mouseX = e.getX();
         int mouseY = e.getY();
-        
-        // Handle mouse clicks during gameplay
-        if(running) {
-            for (int x = 0; x < gridSize; x++) {
-                for (int y = 0; y < gridSize; y++) {
-                    for (int z = 0; z < gridSize; z++) {
-                        if (cubes[x][y][z].contains(mouseX, mouseY)) {
-                            if(!cubes[x][y][z].captured()){
-                                // Update cube selection and player turn based on game mode
-                                switch(GameMode) {
-                                    case MULTIPLAYER:
-                                        switch(turn) {
-                                            case ONE: 
-                                                cubes[x][y][z].clicked(1);
-                                                turn = Player.TWO;
-                                                repaint();
-                                                break;
-                                            case TWO: 
-                                                cubes[x][y][z].clicked(2);
-                                                turn = Player.ONE;
-                                                repaint();
-                                                break;
-                                        }
-                                        break;
-                                    case SINGLE_PLAYER:
-                                        switch(turn) {
-                                            case ONE: 
-                                                cubes[x][y][z].clicked(1);  	                     		
-                                                turn = Player.AI;
-                                                repaint();
-                                                ai.takeAction();
-                                                repaint();
-                                                break;
-                                            case AI:
-                                                break;
-                                        }
-                                        break;
-                                } 
-                            }
-                            break;
-                        }
-                    }
-                }
-            } 
+
+        if (running) {
+            Cube clickedCube = getCubeAt(mouseX, mouseY);
+            if (clickedCube != null && !clickedCube.captured()) {
+                handleCubeClick(clickedCube);
+            }
+        } else {
+            parentFrame.switchPanel(0); // Switch to menu panel after game ends
         }
-        // Handle mouse clicks after the game ends
-        //else new MyFrame(0);
-        else parentFrame.switchPanel(0);
-        
+
         // Check for a winner or a tie
-        if(winChecker.checkWin() == 1) {
+        if (winChecker.checkWin() == 1) {
             displayWinnerCubes();
-            running =false;
-        }
-        else if(winChecker.checkWin() == 0) {
-            running =false;
+            running = false;
+        } else if (winChecker.checkWin() == 0) {
+            running = false;
         }
     }
+
+    /**
+     * Helper method to find the cube at given mouse coordinates.
+     * 
+     * @param mouseX The X coordinate of the mouse click
+     * @param mouseY The Y coordinate of the mouse click
+     * @return The Cube at the given coordinates, or null if no cube was clicked
+     */
+    private Cube getCubeAt(int mouseX, int mouseY) {
+        for (int x = 0; x < gridSize; x++) {
+            for (int y = 0; y < gridSize; y++) {
+                for (int z = 0; z < gridSize; z++) {
+                    if (cubes[x][y][z].contains(mouseX, mouseY)) {
+                        return cubes[x][y][z];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Helper method to handle logic when a cube is clicked.
+     * Handles both multiplayer and single-player scenarios.
+     * 
+     * @param cube The Cube that was clicked
+     */
+    private void handleCubeClick(Cube cube) {
+        switch (GameMode) {
+            case MULTIPLAYER:
+                handleMultiplayerClick(cube);
+                break;
+            case SINGLE_PLAYER:
+                handleSinglePlayerClick(cube);
+                break;
+        }
+        repaint();
+    }
+
+    /**
+     * Handles the logic for multiplayer click events, switching turns between players.
+     * 
+     * @param cube The Cube that was clicked
+     */
+    private void handleMultiplayerClick(Cube cube) {
+        switch (turn) {
+            case ONE:
+                cube.clicked(1);
+                turn = Player.TWO;
+                break;
+            case TWO:
+                cube.clicked(2);
+                turn = Player.ONE;
+                break;
+        }
+    }
+
+    /**
+     * Handles the logic for single-player click events, including AI moves.
+     * 
+     * @param cube The Cube that was clicked
+     */
+    private void handleSinglePlayerClick(Cube cube) {
+        if (turn == Player.ONE) {
+            cube.clicked(1);
+            turn = Player.AI;
+            repaint();
+            ai.takeAction(); // AI takes its turn
+        }
+    }
+
 
     // Unused mouse event methods
     @Override
@@ -229,7 +260,7 @@ public class ThreeDTicTacToe extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {}
 
     /**
-     * Start the AI turn using a Timer for a delay.
+     * Start the AI turn using a Timer.
      */
     public void startAi() {
         ActionListener aiAction = new ActionListener() {
@@ -247,7 +278,7 @@ public class ThreeDTicTacToe extends JPanel implements MouseListener {
             }
         };
 
-        timer = new Timer(5, aiAction);
+        timer = new Timer(1, aiAction);
         if(!aiIsThinking) timer.start();	
     }
 
