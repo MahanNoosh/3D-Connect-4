@@ -77,11 +77,10 @@ public class ThreeDAI {
     }
     
     private int specialCube(int x, int y, int z) {
-    	int value = 0;
-    	if((x == 0||x == gridSize -1) && (y == 0||y == gridSize -1) && (z == 0||z == gridSize -1)) value += 2; //corner
-    	if(x == gridSize / 2 && y == gridSize / 2 &&  z == gridSize / 2 ) value += 0; //left center
-    	if(x == (gridSize - 1) / 2 &&y == (gridSize - 1) / 2 && z == (gridSize - 1) / 2) value += 0; //right center
-    	return value;
+    	if((x == 0||x == gridSize -1) && (y == 0||y == gridSize -1) && (z == 0||z == gridSize -1)) { //corner
+    		return 2;
+    	}
+    	return 0;
     }
     
     private int inRow(int x, int y, int z) {
