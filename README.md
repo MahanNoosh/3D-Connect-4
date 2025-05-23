@@ -35,13 +35,6 @@ The game is played on a 4x4x4 cube, totaling 64 cells. The first player to align
 
 ---
 
-## 🖼️ Screenshot
-
-_Add a screenshot below if you have one:_
-
-
----
-
 ## 🌐 Technologies Used
 
 - Java 8+
